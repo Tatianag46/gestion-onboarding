@@ -1,0 +1,8 @@
+# ~/gestion-onboarding/backend/.gitignore
+.env
+node_modules/
+
+server-ca.pem
+client-key.pem
+client-key.pem
+.env
