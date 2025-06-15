@@ -46,6 +46,7 @@ app.get('/colaboradores', (req, res) => {
     Correo AS correo,
     Fecha_Ingreso AS fecha_ingreso,
     Estado_Bienvenida AS estado_bienvenida,
+    Tipo_Onboarding_Tecnico AS tipo_onboarding_tecnico,
     Estado_Tecnico AS estado_tecnico,
     Fecha_Onboarding AS fecha_onboarding
     FROM VIC.Registro_Colaboradores2`;
@@ -62,24 +63,31 @@ app.get('/colaboradores', (req, res) => {
 
 //Crear un nuevo colaborador
 app.post('/colaboradores', (req, res) => {
-    const { Nombre_Completo, Correo, Fecha_Ingreso, Estado_Bienvenida, Estado_Tecnico, Fecha_Onboarding } = req.body;
+    const { Nombre_Completo, Correo, Fecha_Ingreso } = req.body;
 
     if (!Nombre_Completo || !Correo || !Fecha_Ingreso) {
         return res.status(400).json({ message: 'Faltan campos obligatorios' });
     }
     const query = `INSERT INTO VIC.Registro_Colaboradores2 (
-        Nombre_Completo
-    ) VALUES (?, ?, ?, ?, ?)`;
+        Nombre_Completo,
+        Correo,
+        Fecha_Ingreso,
+        Estado_Bienvenida,
+        Tipo_Onboarding_Tecnico,
+        Estado_Tecnico,
+        Fecha_Onboarding
+    ) VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
     dbConnection.query(query, [
         Nombre_Completo,
         Correo,
         Fecha_Ingreso,
-        Estado_Bienvenida || 'Pendiente',
-        Estado_Tecnico || 'Pendiente',
-        Fecha_Onboarding || null
+        'Pendiente',
+        null,
+        'Pendiente',
+        null
     ], (err, result) => {
-        if (err) {
+        if (!err) {
             res.status(201).json({ message: 'Creado exitosamente', id: result.insertId });
         } else {
             console.error('Error al crear el colaborador', err);
@@ -99,6 +107,7 @@ app.get('/colaboradores/:correo', (req, res) => {
         Correo AS correo,
         Fecha_Ingreso AS fecha_ingreso,
         Estado_Bienvenida AS estado_bienvenida,
+        Tipo_Onboarding_Tecnico AS tipo_onboarding_tecnico,
         Estado_Tecnico AS estado_tecnico,
         Fecha_Onboarding AS fecha_onboarding
     FROM VIC.Registro_Colaboradores2
@@ -120,10 +129,11 @@ app.get('/colaboradores/:correo', (req, res) => {
 //Actualizar un colaborador
 app.put('/colaboradores/:correo', (req, res) => {
     const { correo } = req.params;
-    const { Estado_Bienvenida, Estado_Tecnico, Fecha_Onboarding } = req.body;
+    const { Estado_Bienvenida, Tipo_Onboarding_Tecnico, Estado_Tecnico, Fecha_Onboarding } = req.body;
 
     if (!req.body || (
         Estado_Bienvenida === undefined &&
+        Tipo_Onboarding_Tecnico === undefined &&
         Estado_Tecnico === undefined &&
         Fecha_Onboarding === undefined
     )) {
@@ -134,6 +144,10 @@ app.put('/colaboradores/:correo', (req, res) => {
     if (Estado_Bienvenida !== undefined) {
         updateFields.push('Estado_Bienvenida = ?');
         queryParams.push(Estado_Bienvenida);
+    }
+    if (Tipo_Onboarding_Tecnico !== undefined) { // <-- ¡Nuevo campo!
+        updateFields.push('Tipo_Onboarding_Tecnico = ?');
+        queryParams.push(Tipo_Onboarding_Tecnico);
     }
     if (Estado_Tecnico !== undefined) {
         updateFields.push('Estado_Tecnico = ?');

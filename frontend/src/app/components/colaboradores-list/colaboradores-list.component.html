@@ -1,0 +1,38 @@
+<div class="list-container">
+  <h2>Listado de Colaboradores</h2>
+
+  <div *ngIf="colaboradores.length === 0; else colaboradoresTable" class="no-data-message">
+    No hay colaboradores registrados.
+  </div>
+
+  <ng-template #colaboradoresTable>
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre Completo</th>
+          <th>Correo</th>
+          <th>Fecha de Ingreso</th>
+          <th>Editar</th>
+          <th>Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let colab of colaboradores">
+          <td>{{ colab.nombre_completo }}</td>
+          <td>{{ colab.correo }}</td>
+          <td>{{ colab.fecha_ingreso }}</td>
+          <td>
+            <button (click)="editColaborador(colab.correo)" class="action-button edit-button">
+              <img src="assets/icons/pencil-edit.svg" alt="Editar" class="action-icon">
+            </button>
+          </td>
+          <td>
+            <button (click)="deleteColaborador(colab.correo)" class="action-button delete-button">
+              <img src="assets/icons/delete.svg" alt="Eliminar" class="action-icon">
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-template>
+</div>

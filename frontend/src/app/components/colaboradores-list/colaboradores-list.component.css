@@ -1,0 +1,70 @@
+.list-container {
+  max-width: 1000px;
+  margin: 20px auto;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.list-container h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 25px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+td:nth-child(4),
+/* Para la columna Editar */
+td:nth-child(5) {
+  /* Para la columna Eliminar */
+  text-align: center;
+}
+
+th {
+  background-color: #0043A9;
+  color: white;
+  font-weight: bold;
+}
+
+.action-button {
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 5px;
+  transition: background-color 0.3s ease;
+  display: inline-flex;
+  /* Permite que el botón se comporte como un flex container en línea */
+  justify-content: center;
+  /* Centra el contenido horizontalmente */
+  align-items: center;
+  /* Centra el contenido verticalmente */
+  width: 36px;
+  /* Define un ancho fijo para el botón (ajusta según el tamaño que quieras) */
+  height: 36px;
+  /* Define un alto fijo para el botón */
+  background-color: white;
+}
+
+.no-data-message {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-style: italic;
+}
