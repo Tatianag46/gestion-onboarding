@@ -1,88 +1,104 @@
 <div class="form-container">
     <h2>Editar Colaborador</h2>
-
+  
     <form [formGroup]="colaboradorForm" (ngSubmit)="onSubmit()">
-        <div class="form-group">
-            <label for="nombre_completo">Nombre Completo:</label>
-            <input type="text" id="nombre_completo" formControlName="nombre_completo" readonly>
+  
+      <div class="form-row">
+        <div class="form-column">
+          <div class="form-group">
+              <label for="nombre_completo">Nombre Completo:</label>
+              <input type="text" id="nombre_completo" formControlName="nombre_completo" readonly>
+          </div>
         </div>
-
-        <div class="form-group">
-            <label for="correo">Correo Electrónico:</label>
-            <input type="email" id="correo" formControlName="correo" readonly>
+        <div class="form-column">
+          <div class="form-group">
+              <label for="correo">Correo Electrónico:</label>
+              <input type="email" id="correo" formControlName="correo" readonly>
+          </div>
         </div>
-
-        <div class="form-group">
-            <label for="fecha_ingreso">Fecha de Ingreso:</label>
-            <input type="date" id="fecha_ingreso" formControlName="fecha_ingreso" readonly>
+      </div>
+  
+      <div class="form-row">
+        <div class="form-column">
+          <div class="form-group">
+              <label for="fecha_ingreso">Fecha de Ingreso:</label>
+              <input type="date" id="fecha_ingreso" formControlName="fecha_ingreso" readonly>
+          </div>
         </div>
+        <div class="form-column">
+          <div class="form-group">
+              <label for="estado_bienvenida">Estado Onboarding de Bienvenida:</label>
+              <select id="estado_bienvenida" formControlName="estado_bienvenida" required>
+                  <option *ngFor="let opcion of estadoOpciones" [value]="opcion">{{ opcion }}</option>
+              </select>
+              <div *ngIf="colaboradorForm.get('estado_bienvenida')?.invalid && (colaboradorForm.get('estado_bienvenida')?.dirty || colaboradorForm.get('estado_bienvenida')?.touched)"
+                  class="error-message">
+                  <div *ngIf="colaboradorForm.get('estado_bienvenida')?.errors?.['required']">
+                      El estado de bienvenida es obligatorio.
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="form-row three-columns">
+        <div class="form-column">
+          <div class="form-group">
+              <label for="tipo_onboarding_tecnico">Tipo Onboarding</label>
+              <select id="tipo_onboarding_tecnico" formControlName="tipo_onboarding_tecnico">
+                  <option [value]="null">-- Seleccionar Tipo --</option>
+                  <option *ngFor="let tipo of tipoOnboardingTecnicoOpciones" [value]="tipo">{{ tipo }}</option>
+              </select>
 
-        <div class="form-group">
-            <label for="estado_bienvenida">Estado del Onboarding de Bienvenida:</label>
-            <select id="estado_bienvenida" formControlName="estado_bienvenida" required>
-                <option *ngFor="let opcion of estadoOpciones" [value]="opcion">{{ opcion }}</option>
-            </select>
-            <div *ngIf="colaboradorForm.get('estado_bienvenida')?.invalid && (colaboradorForm.get('estado_bienvenida')?.dirty || colaboradorForm.get('estado_bienvenida')?.touched)"
+              <div *ngIf="colaboradorForm.get('tipo_onboarding_tecnico')?.invalid && (colaboradorForm.get('tipo_onboarding_tecnico')?.dirty || colaboradorForm.get('tipo_onboarding_tecnico')?.touched)"
                 class="error-message">
-                <div *ngIf="colaboradorForm.get('estado_bienvenida')?.errors?.['required']">
-                    El estado de bienvenida es obligatorio.
+                <div *ngIf="colaboradorForm.get('tipo_onboarding_tecnico')?.errors?.['required']">
+                    Debe seleccionar un tipo de onboarding técnico.
                 </div>
-            </div>
+              </div>
+          </div>
         </div>
-
-        <div class="form-group">
-            <label for="tipo_onboarding_tecnico">¿Cuál es el onboarding técnico?</label>
-            <select id="tipo_onboarding_tecnico" formControlName="tipo_onboarding_tecnico">
-                <option [value]="null">-- Seleccionar Tipo --</option>
-                <option *ngFor="let tipo of tipoOnboardingTecnicoOpciones" [value]="tipo">{{ tipo }}</option>
-            </select>
+        <div class="form-column">
+          <div class="form-group">
+              <label for="fecha_onboarding">Fecha Onboarding</label>
+              <input type="date" id="fecha_onboarding" formControlName="fecha_onboarding"
+                  [min]="fechaMinima"
+                  [attr.aria-label]="colaboradorForm.get('tipo_onboarding_tecnico')?.value ? 'Seleccione una fecha' : 'Seleccione un tipo de onboarding primero'"
+                  [disabled]="!colaboradorForm.get('tipo_onboarding_tecnico')?.value" /> <div *ngIf="colaboradorForm.get('fecha_onboarding')?.invalid && (colaboradorForm.get('fecha_onboarding')?.dirty || colaboradorForm.get('fecha_onboarding')?.touched)" class="error-message">
+                  <div *ngIf="colaboradorForm.get('fecha_onboarding')?.errors?.['finDeSemanaInvalido']">
+                      No se permiten fines de semana.
+                  </div>
+                  <div *ngIf="colaboradorForm.get('fecha_onboarding')?.errors?.['fechaPasada']">
+                      No se permite una fecha anterior al día de hoy.
+                  </div>
+                  <div *ngIf="colaboradorForm.get('fecha_onboarding')?.errors?.['diaImparParaJourney']">
+                      Para "Journey to Cloud", solo se permiten días pares.
+                  </div>
+                  <div *ngIf="colaboradorForm.get('fecha_onboarding')?.errors?.['diaParParaOtros']">
+                      Para "Otros", solo se permiten días impares.
+                  </div>
+                  <div *ngIf="colaboradorForm.get('fecha_onboarding')?.errors?.['requiredDateForType']">
+                      Debe seleccionar una fecha para el tipo de onboarding elegido.
+                  </div>
+              </div>
+          </div>
         </div>
-
-        <div class="form-group" *ngIf="colaboradorForm.get('tipo_onboarding_tecnico')?.value">
-            <label for="fecha_onboarding">Fecha Onboarding Técnico Asignado:</label>
-            <input type="date" id="fecha_onboarding" formControlName="fecha_onboarding" [min]="fechaMinima"
-                [attr.aria-label]="colaboradorForm.get('tipo_onboarding_tecnico')?.value ? 'Seleccione una fecha' : 'Seleccione un tipo de onboarding primero'" />
-
-            <div *ngIf="colaboradorForm.get('fecha_onboarding')?.invalid && (colaboradorForm.get('fecha_onboarding')?.dirty || colaboradorForm.get('fecha_onboarding')?.touched)"
-                class="error-message">
-
-                <div *ngIf="colaboradorForm.get('fecha_onboarding')?.errors?.['finDeSemanaInvalido']">
-                    No se permiten fines de semana.
-                </div>
-
-                <div *ngIf="colaboradorForm.get('fecha_onboarding')?.errors?.['fechaPasada']">
-                    No se permite una fecha anterior al día de hoy.
-                </div>
-
-                <div *ngIf="colaboradorForm.get('fecha_onboarding')?.errors?.['diaImparParaJourney']">
-                    Para "Journey to Cloud", solo se permiten días pares.
-                </div>
-
-                <div *ngIf="colaboradorForm.get('fecha_onboarding')?.errors?.['diaParParaOtros']">
-                    Para "Otros", solo se permiten días impares.
-                </div>
-
-                <div *ngIf="colaboradorForm.get('fecha_onboarding')?.errors?.['requiredDateForType']">
-                    Debe seleccionar una fecha para el tipo de onboarding elegido.
-                </div>
-
-            </div>
+        <div class="form-column">
+          <div class="form-group">
+              <label for="estado_tecnico">Estado del Onboarding</label>
+              <select id="estado_tecnico" formControlName="estado_tecnico" required>
+                  <option *ngFor="let opcion of estadoOpciones" [value]="opcion">{{ opcion }}</option>
+              </select>
+              <div *ngIf="colaboradorForm.get('estado_tecnico')?.invalid && (colaboradorForm.get('estado_tecnico')?.dirty || colaboradorForm.get('estado_tecnico')?.touched)"
+                  class="error-message">
+                  <div *ngIf="colaboradorForm.get('estado_tecnico')?.errors?.['required']">
+                      El estado técnico es obligatorio.
+                  </div>
+              </div>
+          </div>
         </div>
-
-
-        <div class="form-group">
-            <label for="estado_tecnico">Estado del Onboarding Técnico:</label>
-            <select id="estado_tecnico" formControlName="estado_tecnico" required>
-                <option *ngFor="let opcion of estadoOpciones" [value]="opcion">{{ opcion }}</option>
-            </select>
-            <div *ngIf="colaboradorForm.get('estado_tecnico')?.invalid && (colaboradorForm.get('estado_tecnico')?.dirty || colaboradorForm.get('estado_tecnico')?.touched)"
-                class="error-message">
-                <div *ngIf="colaboradorForm.get('estado_tecnico')?.errors?.['required']">
-                    El estado técnico es obligatorio.
-                </div>
-            </div>
-        </div>
-
-        <button type="submit" [disabled]="colaboradorForm.invalid">Actualizar Colaborador</button>
+      </div>
+  
+      <button type="submit" [disabled]="colaboradorForm.invalid">Actualizar Colaborador</button>
     </form>
-</div>
+  </div>

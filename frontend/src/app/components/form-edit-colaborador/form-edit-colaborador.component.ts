@@ -40,26 +40,29 @@ export class FormEditColaboradorComponent implements OnInit {
       correo: [{ value: '', disabled: true }],
       fecha_ingreso: [{ value: '', disabled: true }],
       estado_bienvenida: ['', Validators.required],
-      tipo_onboarding_tecnico: [null],
+      tipo_onboarding_tecnico: [null, Validators.required],
       estado_tecnico: ['', Validators.required],
-      fecha_onboarding: [null]
+      fecha_onboarding: [{ value: null, disabled: true }]
     });
 
     this.colaboradorForm.get('tipo_onboarding_tecnico')?.valueChanges.subscribe(tipo => {
       const fechaControl = this.colaboradorForm.get('fecha_onboarding');
       if (tipo) {
-        fechaControl?.enable();
-        fechaControl?.setValidators(this.fechaOnboardingValidator()); // Re-establece el validador al habilitar
+        fechaControl?.enable(); 
+        fechaControl?.setValidators(this.fechaOnboardingValidator());
+        fechaControl?.markAsUntouched(); 
+        fechaControl?.markAsPristine(); 
+        fechaControl?.setErrors(null); 
       } else {
-        fechaControl?.disable();
-        fechaControl?.setValue(null);
-        fechaControl?.clearValidators(); // Limpia validadores al deshabilitar
+        fechaControl?.disable(); 
+        fechaControl?.setValue(null); 
+        fechaControl?.clearValidators(); 
+        fechaControl?.setErrors(null); 
+        fechaControl?.markAsUntouched();
+        fechaControl?.markAsPristine(); 
       }
-      fechaControl?.updateValueAndValidity(); // Actualiza las validaciones
+      fechaControl?.updateValueAndValidity(); 
     });
-
-    // Deshabilitar la fecha de onboarding inicialmente
-    this.colaboradorForm.get('fecha_onboarding')?.disable();
   }
 
   ngOnInit(): void {
@@ -98,6 +101,7 @@ export class FormEditColaboradorComponent implements OnInit {
         } else {
           fechaOnboardingControl?.disable();
           fechaOnboardingControl?.clearValidators();
+          fechaOnboardingControl?.setValue(null);
         }
         fechaOnboardingControl?.updateValueAndValidity();
       },
@@ -120,48 +124,65 @@ export class FormEditColaboradorComponent implements OnInit {
       }
 
       const hoy = new Date();
-      hoy.setHours(0, 0, 0, 0); // Limpiar la hora
+      hoy.setHours(0, 0, 0, 0);
       const [year, month, dayStr] = fechaOnboarding.split('-');
-      const date = parseInt(dayStr, 10);
-      const fechaSeleccionada = new Date(Number(year), Number(month) - 1, date);
+      const fechaSeleccionada = new Date(Number(year), Number(month) - 1, Number(dayStr)); 
 
-      if (fechaSeleccionada < hoy) {
+      if (fechaSeleccionada.getTime() < hoy.getTime()) {
         return { 'fechaPasada': true };
       }
 
-      // Validar fines de semana: sábado (6) y domingo (0)
-      const diaSemana = fechaSeleccionada.getDay();
-      if (diaSemana === 6 || diaSemana === 0) {
+      const diaSemana = fechaSeleccionada.getDay(); 
+      if (diaSemana === 6 || diaSemana === 7) { 
         return { 'finDeSemanaInvalido': true };
       }
 
-      // Validar días pares/impares según tipo
-      if (tipoOnboarding === 'Journey to Cloud' && date % 2 !== 0) {
-        return { 'diaImparParaJourney': true };
-      } else if (tipoOnboarding === 'Otros' && date % 2 === 0) {
-        return { 'diaParParaOtros': true };
+      const date = fechaSeleccionada.getDate(); 
+      if (tipoOnboarding === 'Journey to Cloud') {
+        // Para Journey to Cloud debe ser dia par
+        if (date % 2 !== 0) {
+          return { 'diaImparParaJourney': true };
+        }
+      } else if (tipoOnboarding === 'Otros') {
+        // Para otros debe ser impar
+        if (date % 2 === 0) {
+          return { 'diaParParaOtros': true };
+        }
       }
-
-      return null;
+      return null; 
     };
   }
 
 
   onSubmit(): void {
-    this.colaboradorForm.markAllAsTouched(); // Marcar todos los campos como tocados
-    this.colaboradorForm.get('fecha_onboarding')?.updateValueAndValidity(); // Forzar la validación de la fecha
+    const tipoOnboarding = this.colaboradorForm.get('tipo_onboarding_tecnico')?.value;
+    const fechaOnboarding = this.colaboradorForm.get('fecha_onboarding')?.value;
+    const fechaControl = this.colaboradorForm.get('fecha_onboarding');
+
+    if (tipoOnboarding && !fechaOnboarding) {
+      fechaControl?.setErrors({ required: true });
+      fechaControl?.markAsTouched();
+    } else if (!tipoOnboarding && fechaOnboarding) {
+      fechaControl?.setValue(null);
+      fechaControl?.disable();
+      fechaControl?.clearValidators();
+      fechaControl?.setErrors(null);
+    } else if (!tipoOnboarding && !fechaOnboarding) {
+      fechaControl?.setValue(null);
+      fechaControl?.disable();
+      fechaControl?.clearValidators();
+      fechaControl?.setErrors(null);
+    } else if (tipoOnboarding && fechaOnboarding) {
+      if (fechaControl?.hasError('required')) {
+        fechaControl.setErrors(null);
+      }
+    }
+
+    this.colaboradorForm.markAllAsTouched();
+    this.colaboradorForm.updateValueAndValidity();
+
 
     if (this.colaboradorForm.valid) {
-      const tipoOnboarding = this.colaboradorForm.get('tipo_onboarding_tecnico')?.value;
-      const fechaOnboarding = this.colaboradorForm.get('fecha_onboarding')?.value;
-
-      // Valida si la fecha es obligatoria si el tipo está seleccionado
-      if (tipoOnboarding && !fechaOnboarding) {
-        alert('Debe seleccionar una fecha para el tipo de onboarding técnico elegido.');
-        this.colaboradorForm.get('fecha_onboarding')?.setErrors({ requiredDateForType: true });
-        return; // Detener el envío
-      }
-
       const updates: Partial<Colaborador> = {
         estado_bienvenida: this.colaboradorForm.get('estado_bienvenida')?.value,
         estado_tecnico: this.colaboradorForm.get('estado_tecnico')?.value,
@@ -184,6 +205,7 @@ export class FormEditColaboradorComponent implements OnInit {
       alert('Por favor, completa todos los campos obligatorios y corrige los errores de validación.');
       console.log('Errores del formulario:', this.colaboradorForm.errors);
       console.log('Errores en fecha_onboarding:', this.colaboradorForm.get('fecha_onboarding')?.errors);
+      console.log('Errores en tipo_onboarding_tecnico:', this.colaboradorForm.get('tipo_onboarding_tecnico')?.errors);
     }
   }
 }

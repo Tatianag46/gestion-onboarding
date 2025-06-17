@@ -1,0 +1,48 @@
+.calendar-container {
+    max-width: 800px; /* Ancho máximo del calendario */
+    margin: 20px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .calendar-container h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 25px;
+  }
+  
+  .fc .fc-button {
+    background-color: #0043A9 !important;
+    border-color: #0043A9 !important;
+    color: white !important;
+    text-transform: capitalize; 
+  }
+  
+  .fc .fc-button:hover {
+    background-color: #002c6b !important;
+    border-color: #002c6b !important;
+  }
+  
+  /* Estilo general para los eventos */
+  .fc-event {
+    cursor: pointer;
+    font-size: 0.85em;
+    padding: 2px 5px;
+    border-radius: 3px;
+    white-space: normal; 
+    line-height: 1.2;
+    border: 1px solid transparent; 
+  }
+  
+  /* Estilos para el día actual */
+  .fc .fc-daygrid-day.fc-day-today {
+    background-color: #e6f2ff; 
+  }
+  
+  /* Estilos para las celdas de los días de la semana */
+  .fc .fc-col-header-cell-cushion {
+      color: #333;
+      font-weight: bold;
+  }

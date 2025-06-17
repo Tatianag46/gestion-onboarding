@@ -7,7 +7,7 @@ const port = process.env.PORT || 3000;
 
 const cors = require('cors');
 app.use(cors());
-
+const cron = require('node-cron');
 
 // 3. Importar la conexión a la base de datos 
 const dbConnection = require('./db');
@@ -196,6 +196,48 @@ app.delete('/colaboradores/:correo', (req, res) => {
         }
     });
 });
+
+cron.schedule('0 8 * * *', () => {
+    const query = `
+        SELECT Nombre_Completo, Correo, Fecha_Onboarding
+        FROM ${TABLA_COLABORADORES}
+        WHERE Estado_Tecnico = 'Pendiente'
+        AND Fecha_Onboarding IS NOT NULL
+        AND DATE(Fecha_Onboarding) = CURDATE() + INTERVAL 7 DAY
+    `;
+
+    dbConnection.query(query, (err, rows) => {
+        if (err) {
+            console.error('[CRON] Error al consultar onboarding técnico:', err);
+            return;
+        }
+
+        if (rows.length === 0) {
+            console.log('[CRON] No hay colaboradores con onboarding en 7 días.');
+            return;
+        }
+
+        rows.forEach((colaborador) => {
+            const { Nombre_Completo, Correo, Fecha_Onboarding } = colaborador;
+            
+            const subject = `🔔 Recordatorio: Onboarding Técnico programado para el ${Fecha_Onboarding}`;
+            const body = `
+                Hola ${Nombre_Completo},
+                Te recordamos que tu onboarding técnico está programado para el ${Fecha_Onboarding}
+                Por favor, asegúrate de estar disponible.
+                ¡Gracias!
+                Equipo de Talento Humano
+            `;
+
+            // Simulación de envío
+            console.log('[CRON] Enviando correo a:', Correo);
+            console.log('Asunto:', subject);
+            console.log('Cuerpo:', body);
+            console.log('--------------------------------------------------');
+        });
+    });
+});
+
 
 app.listen(port, () => {
     console.log(`Servidor backend escuchando en http://localhost:${port}`);

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { TopbarComponent } from './components/topbar/topbar.component';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +10,8 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
     CommonModule, 
     RouterOutlet, 
     RouterLink, 
-    RouterLinkActive
+    RouterLinkActive,
+    TopbarComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'

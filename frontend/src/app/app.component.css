@@ -1,27 +1,21 @@
-/* Fondo global blanco */
-body, html {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  background-color: #ffffff;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-/* Contenedor principal con layout horizontal */
 .main-container {
-  display: flex;
-  height: 100vh;
-  background-color: #fff;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),url("/assets/images/Fondo-5.jpg");
+  background-position: center; 
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding-top: 60px; 
+  box-sizing: border-box; 
 }
 
-/* Sidebar */
 .sidebar {
   position: fixed;
-  top: 0;
+  top: 60px;
   left: 0;
   height: 100vh;
   width: 70px;
-  background-color: #fff;
+  background-color: #002c6b;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
@@ -29,11 +23,12 @@ body, html {
   transition: width 0.3s ease;
   overflow-x: hidden;
   z-index: 1000;
+  flex-shrink: 0;
 }
 
 /* Sidebar expandido */
 .sidebar.expanded {
-  width: 300px;
+  width: 270px;
 }
 
 /* Encabezado del Sidebar */
@@ -79,11 +74,11 @@ body, html {
 .brand-text {
   font-size: 1.2em;
   font-weight: bold;
-  color: #333;
   white-space: nowrap;
   opacity: 0;
   transition: opacity 0.3s ease;
   width: 0;
+  filter: brightness(0) invert(1);
 }
 
 .sidebar.expanded .brand-text {
@@ -127,7 +122,7 @@ body, html {
 
 .user-info {
   font-size: 0.9em;
-  color: #333;
+  color: white;
   flex-grow: 1;
   white-space: nowrap;
   opacity: 0;
@@ -153,7 +148,7 @@ body, html {
   cursor: pointer;
   display: flex;
   align-items: center;
-  color: #444;
+  color: #e0e0e0;
   font-size: 1em;
   border-left: 5px solid transparent;
   transition: background-color 0.2s, border-left-color 0.2s, color 0.2s, padding 0.3s ease;
@@ -164,7 +159,8 @@ body, html {
 }
 
 .menu-item:hover {
-  background-color: #f0f0f0;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
 }
 
 .menu-item a {
@@ -182,6 +178,7 @@ body, html {
   object-fit: contain;
   flex-shrink: 0;
   transition: margin-right 0.3s ease;
+  filter: brightness(0) invert(1);
 }
 
 .sidebar.expanded .menu-icon {
@@ -200,7 +197,6 @@ body, html {
   width: auto;
 }
 
-/* Elemento de "Salir" */
 .logout-item {
   margin-top: auto;
   border-top: 1px solid #eee;
@@ -211,11 +207,9 @@ body, html {
 /* Área de contenido ajustada */
 .content-area {
   flex-grow: 1;
-  background-color: #f5f5f5;
   margin-left: 70px;
 }
 
-/* Contenedor central estilo tarjeta */
 .table-container {
   background-color: #fff;
   padding: 30px;

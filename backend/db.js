@@ -9,14 +9,14 @@ const mysqlConnection = mysql.createConnection({
 	user: 'banco_bogota_administrador',
 	password: 'Vp3mpr3s4s#',
 	database: 'SIBE',
-	socketPath: '/cloudsql/bbogota-davinci-empresas:us-central1:desarrollo-db3',
+	//socketPath: '/cloudsql/bbogota-davinci-empresas:us-central1:desarrollo-db3',
 	port: 3306,
 	ssl: true,
-	/*ssl: {
+	ssl: {
          ca: fs.readFileSync('server-ca.pem'),
          key: fs.readFileSync('client-key.pem'),
          cert: fs.readFileSync('client-cert.pem'),
-     }*/
+     }
 });
 
 module.exports = mysqlConnection;

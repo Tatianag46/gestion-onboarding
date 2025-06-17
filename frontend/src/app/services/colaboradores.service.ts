@@ -17,6 +17,7 @@ export interface Colaborador {
 })
 export class ColaboradoresService {
   private apiUrl = 'http://localhost:3000/colaboradores';
+  private mailApiUrl = 'http://localhost:3000/send-alert-email';
 
   constructor(private http: HttpClient) { }
 
@@ -65,5 +66,10 @@ export class ColaboradoresService {
   //Eliminar un colaborador
   deleteColaborador(correo: string): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${correo}`);
+  }
+
+  sendOnboardingAlertEmail(to: string, subject: string, body: string): Observable<any>{
+    const payload = {to, subject, body};
+    return this.http.post<any>(this.mailApiUrl, payload);
   }
 }

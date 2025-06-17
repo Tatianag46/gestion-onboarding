@@ -50,15 +50,10 @@ th {
   margin-right: 5px;
   transition: background-color 0.3s ease;
   display: inline-flex;
-  /* Permite que el botón se comporte como un flex container en línea */
   justify-content: center;
-  /* Centra el contenido horizontalmente */
   align-items: center;
-  /* Centra el contenido verticalmente */
   width: 36px;
-  /* Define un ancho fijo para el botón (ajusta según el tamaño que quieras) */
   height: 36px;
-  /* Define un alto fijo para el botón */
   background-color: white;
 }
 

@@ -1,39 +1,50 @@
 <div class="form-container">
-    <h2>Registrar Nuevo Colaborador</h2>
-    <form [formGroup]="colaboradorForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="nombre_completo">Nombre Completo:</label>
-        <input type="text" id="nombre_completo" formControlName="nombre_completo" required>
-        <div *ngIf="colaboradorForm.get('nombre_completo')?.invalid && (colaboradorForm.get('nombre_completo')?.dirty || colaboradorForm.get('nombre_completo')?.touched)" class="error-message">
-          <div *ngIf="colaboradorForm.get('nombre_completo')?.errors?.['required']">
-            El nombre completo es obligatorio.
+  <h2>Registrar Nuevo Colaborador</h2>
+  <form [formGroup]="colaboradorForm" (ngSubmit)="onSubmit()">
+
+    <div class="form-row">
+      <div class="form-column">
+        <div class="form-group">
+          <label for="nombre_completo">Nombre Completo:</label>
+          <input type="text" id="nombre_completo" formControlName="nombre_completo" required>
+          <div *ngIf="colaboradorForm.get('nombre_completo')?.invalid && (colaboradorForm.get('nombre_completo')?.dirty || colaboradorForm.get('nombre_completo')?.touched)" class="error-message">
+            <div *ngIf="colaboradorForm.get('nombre_completo')?.errors?.['required']">
+              El nombre completo es obligatorio.
+            </div>
           </div>
         </div>
       </div>
-  
-      <div class="form-group">
-        <label for="correo">Correo Electrónico:</label>
-        <input type="email" id="correo" formControlName="correo" required>
-        <div *ngIf="colaboradorForm.get('correo')?.invalid && (colaboradorForm.get('correo')?.dirty || colaboradorForm.get('correo')?.touched)" class="error-message">
-          <div *ngIf="colaboradorForm.get('correo')?.errors?.['required']">
-            El correo es obligatorio.
-          </div>
-          <div *ngIf="colaboradorForm.get('correo')?.errors?.['email']">
-            Por favor, ingresa un correo válido.
-          </div>
-        </div>
-      </div>
-  
-      <div class="form-group">
-        <label for="fecha_ingreso">Fecha de Ingreso:</label>
-        <input type="date" id="fecha_ingreso" formControlName="fecha_ingreso" required>
-        <div *ngIf="colaboradorForm.get('fecha_ingreso')?.invalid && (colaboradorForm.get('fecha_ingreso')?.dirty || colaboradorForm.get('fecha_ingreso')?.touched)" class="error-message">
-          <div *ngIf="colaboradorForm.get('fecha_ingreso')?.errors?.['required']">
-            La fecha de ingreso es obligatoria.
+      <div class="form-column">
+        <div class="form-group">
+          <label for="correo">Correo Electrónico:</label>
+          <input type="email" id="correo" formControlName="correo" required>
+          <div *ngIf="colaboradorForm.get('correo')?.invalid && (colaboradorForm.get('correo')?.dirty || colaboradorForm.get('correo')?.touched)" class="error-message">
+            <div *ngIf="colaboradorForm.get('correo')?.errors?.['required']">
+              El correo es obligatorio.
+            </div>
+            <div *ngIf="colaboradorForm.get('correo')?.errors?.['email']">
+              Por favor, ingresa un correo válido.
+            </div>
           </div>
         </div>
       </div>
-  
-      <button type="submit" [disabled]="colaboradorForm.invalid">Registrar Colaborador</button>
-    </form>
-  </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-column"> <div class="form-group">
+          <label for="fecha_ingreso">Fecha de Ingreso:</label>
+          <input type="date" id="fecha_ingreso" formControlName="fecha_ingreso" required>
+          <div *ngIf="colaboradorForm.get('fecha_ingreso')?.invalid && (colaboradorForm.get('fecha_ingreso')?.dirty || colaboradorForm.get('fecha_ingreso')?.touched)" class="error-message">
+            <div *ngIf="colaboradorForm.get('fecha_ingreso')?.errors?.['required']">
+              La fecha de ingreso es obligatoria.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-column">
+        </div>
+    </div>
+
+    <button type="submit" [disabled]="colaboradorForm.invalid">Registrar Colaborador</button>
+  </form>
+</div>
